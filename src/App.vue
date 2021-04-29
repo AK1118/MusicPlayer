@@ -192,4 +192,9 @@
 		z-index: 100;
 		opacity: .6;
 	}
+	@media screen and (max-width:1100px){
+		#app{
+			transform: scale(.5);
+		}
+	}
 </style>
