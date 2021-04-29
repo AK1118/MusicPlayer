@@ -30,7 +30,7 @@
 				<myplaylist v-if="ShowbarHandler.pages.myplaylist"></myplaylist>
 				<collect v-if="ShowbarHandler.pages.collectplaylist"></collect>
 			</div>
-			<bottom v-if="isBottomShow"
+			<bottom v-show="isBottomShow"
 					:setAudioSrc="$attrs['setAudioSrc']"
 					:musicInfo="$attrs['musicInfo']"
 					>

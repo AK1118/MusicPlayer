@@ -56,7 +56,7 @@
 				Mduration:0,//总时长
 				McurrentTime:0,//已经播放时长
 				Timer:null,//更新进度条interval容器
-				value1:.3,
+				value1:1,
 				play_type:0,
 				play_type_class:'el-icon-sort',
 				new_music:{//现在播放音乐对象

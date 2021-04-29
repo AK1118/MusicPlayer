@@ -3,7 +3,13 @@
 		<div>
 			<!--  <el-button @click="startHacking">Start</el-button> -->
 			<!-- <myhead :setAudioSrc="setAudioSrc" :getSongerMusicAll="getSongerMusicAll"></myhead> -->
-			<visual v-if="ShowbarHandler.pages.visual"></visual>
+			<visual v-show="ShowbarHandler.pages.visual"
+					:off="offVisual"></visual>
+			<div class="visual_show">
+				<el-switch v-model="ShowbarHandler.pages.visual"
+							 active-text="音乐可视化"
+							></el-switch>
+			</div>
 			<mymain v-show="true" :setAudioSrc="setAudioSrc" :handlerOfAudio="handlerOfAudio" :musicInfo="musicInfo"
 					:ShowbarHandler="ShowbarHandler" 
 					:searchMusicAll="searchMusicAll"
@@ -54,7 +60,7 @@
 						diantai:false,
 						myplaylist:false,
 						collectplaylist:false,
-						visual:true,
+						visual:false,
 						rest: function() {
 							this.list = this.singer = this.mv = this.index = 
 							this.playlist = this.ilike=this.diantai=this.myplaylist=this.collectplaylist
@@ -80,6 +86,9 @@
 			},
 			pause() {
 				this.auel.pause();
+			},
+			offVisual:function(){
+				this.ShowbarHandler.pages.visual=false;
 			},
 			handlerOfAudio(type) {
 				/* if (type.type == 1) this.play();
@@ -175,5 +184,11 @@
 		justify-content: center;
 		align-items: center;
 		z-index: 999;
+	}
+	.visual_show{
+		position: fixed;
+		right: 0px;
+		top:0px;
+		z-index: 100;
 	}
 </style>
