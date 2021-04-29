@@ -190,5 +190,6 @@
 		right: 0px;
 		top:0px;
 		z-index: 100;
+		opacity: .6;
 	}
 </style>

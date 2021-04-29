@@ -13,23 +13,28 @@
 			</div>
 		</div>
 		<div class="center">
-			<div class="before" @click="before"><div class="el-icon-arrow-left"></div></div>
-			<div class="play_pause" @click="setAudioPlayPause">
-				<img :src="isplayImg" />
+			<div class="play_bar">
+				<div class="before" @click="before"><div class="el-icon-arrow-left"></div></div>
+				<div class="play_pause" @click="setAudioPlayPause">
+					<img :src="isplayImg" />
+				</div>
+				<div class="next" @click="next"><div class="el-icon-arrow-right"></div></div>
 			</div>
-			<div class="next" @click="next"><div class="el-icon-arrow-right"></div></div>
-			<div class="model_bar" @click="changePlayType" :title="getPlayTypeTitle"><div :class="play_type_class"></div></div>
-			<div class="volume_bar">
-				<div class="el-icon-bell">
-					<div class="solider_bar">
-						 <el-slider
-								:min="0"
-								:max="1"
-								:step=".1"
-								:show-tooltip="false"
-								v-model="value1"
-								@input="setVolume"
-								></el-slider>
+			<div class="tools_bar">
+				<div class="model_bar" @click="changePlayType" :title="getPlayTypeTitle"><div :class="play_type_class"></div></div>
+				<div class="model_bar" @click="setplaybackRate" title="更改倍速"><div><font size="1">{{getPlaybackRate}}</font></div></div>
+				<div class="volume_bar">
+					<div class="el-icon-bell">
+						<div class="solider_bar">
+							 <el-slider
+									:min="0"
+									:max="1"
+									:step=".1"
+									:show-tooltip="false"
+									v-model="value1"
+									@input="setVolume"
+									></el-slider>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -55,6 +60,7 @@
 				AudioELement:null,//音乐标签对象
 				Mduration:0,//总时长
 				McurrentTime:0,//已经播放时长
+				playbackRate:1,//播放速度
 				Timer:null,//更新进度条interval容器
 				value1:1,
 				play_type:0,
@@ -107,6 +113,13 @@
 				this.getMusicSrc(this.musicInfo.list[this.index]);
 				console.log(this.index)
 			},
+			setplaybackRate:function(){
+				this.playbackRate+=1;
+				if(this.playbackRate>3)
+					this.playbackRate=0;
+				let speed=[.5,1,2,2.5];
+				this.AudioELement.playbackRate=speed[this.playbackRate];
+			},
 			changePlayType:function(){//改变播放模式   顺序   单曲   随机
 				this.play_type+=1;
 				if(this.play_type>2)this.play_type=0;
@@ -145,6 +158,8 @@
 
 			},
 			setAudioPlayPause:function(){//设置播放暂停
+			if(this.new_music.name=="未选择音乐源")
+				return;
 				this.IsPlay=!this.IsPlay;
 				this.play_pause=!this.IsPlay?"../static/Image/play.png":"../static/Image/pause.png";
 				this.IsPlay?this.AudioELement.play():this.AudioELement.pause();
@@ -200,6 +215,10 @@
 			},
 			pro:function(){//进度条长度
 				return this.McurrentTime*this.progressavg;//(this.musicInfo.currentTime*this.progressavg);
+			},
+			getPlaybackRate:function(){
+				let speed=[.5,1,2,2.5];
+				return speed[this.playbackRate];
 			},
 			getPlayTypeTitle:function(){
 				if(this.play_type==0)return '顺序播放';
@@ -264,7 +283,7 @@
 	.content .left .picture{
 		width: 40px;
 		height: 40px;
-		border-radius: 10px;
+		border-radius:3px;
 		margin-right: 16px;
 		box-shadow: 1px 1px 1px 0px #ccc;
 		overflow: hidden;
@@ -276,26 +295,28 @@
 		height: 40px;
 	}	
 	.content .center {
-		width: 190px;
+		width: 220px;
 		height: 100%;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
-	.content .center .before,.next,.volume_bar,.model_bar{
-		width:23px;
-		height: 23px;
-		border-radius: 100%;
-		opacity: .6;
+	.tools_bar{
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding-left: 60px;
 	}
-	.content .center .volume_bar,.model_bar{
+	.volume_bar,.model_bar{
 		text-align: center;
 		width:36px;
 		height: 23px;
 		background-color: #d8d8d8;
-		border-radius: 6px;
+		border-radius: 3px;
+		
 	}
-	.content .volume_bar :hover .solider_bar{
+	.volume_bar :hover .solider_bar{
 		width: 100px;
 		height: 23px;
 		left:-3px;
@@ -303,8 +324,8 @@
 		opacity: 1;
 		padding-left: 16px;
 		padding-right: 16px;
-	}
-	.content .volume_bar .solider_bar{
+		z-index: 9999;	}
+	.volume_bar .solider_bar{
 		width: 0px;
 		height: 20px;
 		position: relative;
@@ -314,12 +335,28 @@
 		transition: all .5s;
 		border-radius: 6px;
 	}
-	.content .center .before img,.next img{
+	.play_bar{
+		width: 200px;
+		height: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.before,.next,.volume_bar,.model_bar{
+		width:23px;
+		height: 23px;
+		border-radius:3px;
+		padding-left: 8px;
+		padding-right: 8px;
+		opacity: .6;
+		margin: 8px;
+	}
+	.before img,.next img{
 		width: 19px;
 		height: 19px;
 		opacity: .6;
 	}
-	.content .center .play_pause{
+	.play_pause{
 		width: 35px;
 		height: 35px;
 		border-radius: 100%;
@@ -330,12 +367,12 @@
 		display: flex;
 		justify-content: center;
 	}
-	.content .center .play_pause img{
+	.play_pause img{
 		width: 19px;
 		height: 19px;
 		align-self: center;
 	}
-	.content .right{
+	.right{
 		width: 190px;
 		height: 100%;
 		text-align: center;
