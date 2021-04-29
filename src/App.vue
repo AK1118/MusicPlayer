@@ -3,6 +3,7 @@
 		<div>
 			<!--  <el-button @click="startHacking">Start</el-button> -->
 			<!-- <myhead :setAudioSrc="setAudioSrc" :getSongerMusicAll="getSongerMusicAll"></myhead> -->
+			<visual v-if="ShowbarHandler.pages.visual"></visual>
 			<mymain v-show="true" :setAudioSrc="setAudioSrc" :handlerOfAudio="handlerOfAudio" :musicInfo="musicInfo"
 					:ShowbarHandler="ShowbarHandler" 
 					:searchMusicAll="searchMusicAll"
@@ -20,6 +21,7 @@
 	import left from "../pages/Left.vue"
 	import myhead from "../pages/head.vue"
 	import mymain from "../pages/main.vue"
+	import visualmusic from "../pages/musicvisualbar.vue"
 	import {
 		get
 	} from "../commons/js/request.js"
@@ -52,9 +54,11 @@
 						diantai:false,
 						myplaylist:false,
 						collectplaylist:false,
+						visual:true,
 						rest: function() {
 							this.list = this.singer = this.mv = this.index = 
-							this.playlist = this.ilike=this.diantai=this.myplaylist=this.collectplaylist=false;
+							this.playlist = this.ilike=this.diantai=this.myplaylist=this.collectplaylist
+							=this.visual=false;
 						},
 					},
 				},
@@ -123,6 +127,7 @@
 			left: left,
 			myhead: myhead,
 			mymain: mymain,
+			visual:visualmusic,
 		}
 	}
 </script>
